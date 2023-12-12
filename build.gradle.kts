@@ -3,7 +3,7 @@ plugins {
     application
 }
 
-group = "org.example"
+group = "ru.hse"
 version = "1.0-SNAPSHOT"
 
 repositories {
@@ -11,6 +11,8 @@ repositories {
 }
 
 dependencies {
+    // https://mvnrepository.com/artifact/commons-io/commons-io
+    implementation("commons-io:commons-io:2.15.1")
     testImplementation(kotlin("test"))
 }
 
@@ -24,4 +26,14 @@ kotlin {
 
 application {
     mainClass.set("MainKt")
+}
+
+tasks.jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    manifest.attributes["Main-Class"] = application.mainClass
+
+    configurations["compileClasspath"].forEach {
+        from(zipTree(it.absolutePath))
+    }
 }
