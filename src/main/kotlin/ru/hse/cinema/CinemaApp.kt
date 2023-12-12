@@ -8,7 +8,11 @@ import ru.hse.cinema.entity.SessionEntity
 import ru.hse.cinema.entity.TicketEntity
 import java.util.*
 
-class CinemaApp(private val movieDao: MovieDao, private val ticketDao: TicketDao, private val sessionDao: SessionDao) {
+class CinemaApp(
+    private val movieDao: MovieDao,
+    private val ticketDao: TicketDao,
+    private val sessionDao: SessionDao
+) {
 
     fun run() {
         // Здесь можно реализовать цикл взаимодействия с пользователем
@@ -32,4 +36,9 @@ class CinemaApp(private val movieDao: MovieDao, private val ticketDao: TicketDao
         sessionDao.addSession(session)
     }
 
+    fun deleteSession(session: SessionEntity) {
+        val ticketsForSession = ticketDao.getTicketsForSession(session)
+        ticketsForSession.forEach { ticketDao.returnTicket(it) }
+        sessionDao.deleteSession(session)
+    }
 }

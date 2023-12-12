@@ -5,22 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="305b20b7-14d2-46a0-a3f0-de78395dd8ec" name="Changes" comment="third changes">
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_12_12_2023_13_33_[Changes]/shelved.patch" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_12_12_2023_13_33__Changes_.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_12_2023_13_31_[Changes]/shelved.patch" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_12_2023_13_31__Changes_.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/InMemorySessionDao.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/SessionDao.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/entity/SessionEntity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/CinemaApp.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/CinemaApp.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/Main.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/Scheduler.kt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/InMemoryMovieDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/InMemoryMovieDao.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/InMemorySessionDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/InMemorySessionDao.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/InMemoryTicketDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/InMemoryTicketDao.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/MovieDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/MovieDao.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/entity/MovieEntity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/entity/MovieEntity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/entity/TicketEntity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/entity/TicketEntity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/SessionDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/SessionDao.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/TicketDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/TicketDao.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/entity/SessionEntity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/entity/SessionEntity.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,12 +60,14 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "a94de273",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "42f827b3",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
-    "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable"
+    "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable",
+    "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="RunManager">
@@ -97,6 +94,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1702375192804</updated>
+      <workItem from="1702408682902" duration="5823000" />
     </task>
     <task id="LOCAL-00001" summary="create">
       <option name="closed" value="true" />
@@ -122,12 +120,24 @@
       <option name="project" value="LOCAL" />
       <updated>1702385749174</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="third changes">
+      <option name="closed" value="true" />
+      <created>1702392355071</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1702392355071</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="create" />
     <MESSAGE value="first mini changes" />
+    <MESSAGE value="third  changes" />
     <MESSAGE value="second changes" />
     <MESSAGE value="third changes" />
     <option name="LAST_COMMIT_MESSAGE" value="third changes" />
@@ -135,7 +145,8 @@
   <component name="XDebuggerManager">
     <watches-manager>
       <configuration name="JetRunConfigurationType">
-        <watch expression="((InMemoryMovieDao)((CinemaApp)cinemaApp).movieDao).movies" custom="ru.hse.cinema.dao.InMemoryMovieDao,ru.hse.cinema.CinemaApp" />
+        <watch expression="((SessionEntity)((java.util.ArrayList)((InMemorySessionDao)sessionDao).sessions).get(0)).timeStart" custom="ru.hse.cinema.entity.SessionEntity,ru.hse.cinema.dao.InMemorySessionDao,java.util.ArrayList" />
+        <watch expression="session2" />
       </configuration>
     </watches-manager>
   </component>

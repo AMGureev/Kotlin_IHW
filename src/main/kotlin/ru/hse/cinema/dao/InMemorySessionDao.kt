@@ -9,15 +9,10 @@ class InMemorySessionDao : SessionDao{
     }
 
     override fun editSession(session: SessionEntity) {
-        TODO("Not yet implemented")
-    }
 
-    override fun returnAllTickets(session: SessionEntity) {
-        TODO("Not yet implemented")
     }
 
     override fun deleteSession(session: SessionEntity) {
-        returnAllTickets(session)
         sessions.remove(session)
     }
 }
