@@ -1,9 +1,20 @@
 package ru.hse.cinema
 
-fun main(args: Array<String>) {
-    println("Hello World!")
+import ru.hse.cinema.dao.InMemoryMovieDao
+import ru.hse.cinema.dao.InMemoryTicketDao
+import ru.hse.cinema.dao.InMemorySessionDao
+import ru.hse.cinema.entity.MovieEntity
+import java.util.*
 
-    // Try adding program arguments via Run/Debug configuration.
-    // Learn more about running applications: https://www.jetbrains.com/help/idea/running-applications.html.
-    println("Program arguments: ${args.joinToString()}")
+fun main() {
+    val movieDao = InMemoryMovieDao()
+    val ticketDao = InMemoryTicketDao()
+    val sessionDao = InMemorySessionDao()
+    val cinemaApp = CinemaApp(movieDao, ticketDao, sessionDao)
+
+    val movie = MovieEntity("Inception", 150)
+    val date = Date()
+
+    cinemaApp.addMovie(movie)
+    cinemaApp.addSession(movie, date)
 }
