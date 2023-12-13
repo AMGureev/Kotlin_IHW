@@ -5,5 +5,5 @@ import java.util.*
 
 data class SessionEntity(
     val movie: MovieEntity,
-    val timeStart: Date,
+    var timeStart: Date,
 )

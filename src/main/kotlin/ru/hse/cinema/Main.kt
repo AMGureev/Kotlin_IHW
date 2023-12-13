@@ -18,11 +18,12 @@ fun main() {
     val movie2 = MovieEntity("Hello there!", 90)
     val date2 = Date()
     cinemaApp.addMovie(movie)
-    movieDao.editMovie(movie)
     cinemaApp.addSession(movie, date)
+    movieDao.editMovie(movie, 100)
     val session = SessionEntity(movie, date)
     val session2 = SessionEntity(movie2, date2)
     cinemaApp.sellTicket(session, 3, 123.1)
+    movieDao.editMovie(movie, 50)
     cinemaApp.sellTicket(session2, 5, 40.5)
     cinemaApp.deleteSession(session)
 }

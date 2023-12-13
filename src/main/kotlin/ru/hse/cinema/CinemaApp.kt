@@ -41,4 +41,12 @@ class CinemaApp(
         ticketsForSession.forEach { ticketDao.returnTicket(it) }
         sessionDao.deleteSession(session)
     }
+
+    fun editSession(session: SessionEntity, newDate: Date) {
+        sessionDao.editSession(session, newDate)
+    }
+
+    fun editMovie(updatedMovie: MovieEntity, newDuration: Int) {
+        movieDao.editMovie(updatedMovie, newDuration)
+    }
 }
