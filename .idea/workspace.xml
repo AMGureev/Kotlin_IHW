@@ -5,13 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="305b20b7-14d2-46a0-a3f0-de78395dd8ec" name="Changes" comment="fourth changes">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/InMemoryPlaceDao.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/PlaceDao.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/entity/PlaceEntity.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/CinemaApp.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/CinemaApp.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/Main.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/InMemorySessionDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/InMemorySessionDao.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/InMemoryTicketDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/InMemoryTicketDao.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/SessionDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/SessionDao.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/entity/SessionEntity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/entity/SessionEntity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/entity/TicketEntity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/entity/TicketEntity.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,9 +30,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Kotlin Interface" />
         <option value="Class" />
         <option value="Kotlin Data Class" />
-        <option value="Kotlin Interface" />
         <option value="Kotlin Class" />
       </list>
     </option>
@@ -40,6 +44,20 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;AMGureev&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="cc777726-a671-4c79-adff-59bdede82d16" />
+        <option name="url" value="https://github.com/AMGureev/Kotlin_IHW.git" />
+      </UrlAndAccount>
+    </option>
   </component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
@@ -57,7 +75,7 @@
   &quot;keyToString&quot;: {
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;228e347e&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;e4b10069&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -92,7 +110,10 @@
       <updated>1702375192804</updated>
       <workItem from="1702408682902" duration="5858000" />
       <workItem from="1702464033550" duration="339000" />
-      <workItem from="1702465101996" duration="3400000" />
+      <workItem from="1702465101996" duration="4608000" />
+      <workItem from="1702481107558" duration="1222000" />
+      <workItem from="1702496575287" duration="1255000" />
+      <workItem from="1702500550716" duration="5423000" />
     </task>
     <task id="LOCAL-00001" summary="create">
       <option name="closed" value="true" />
@@ -134,7 +155,15 @@
       <option name="project" value="LOCAL" />
       <updated>1702418399369</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="fourth changes">
+      <option name="closed" value="true" />
+      <created>1702468542951</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1702468542951</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -150,10 +179,47 @@
     <option name="LAST_COMMIT_MESSAGE" value="fourth changes" />
   </component>
   <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/Main.kt</url>
+          <line>29</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/Main.kt</url>
+          <line>32</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/Main.kt</url>
+          <line>33</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/Main.kt</url>
+          <line>30</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/Main.kt</url>
+          <line>31</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <pin-to-top-manager>
+      <pinned-members>
+        <PinnedItemInfo parentTag="ru.hse.cinema.entity.SessionEntity" memberName="places" />
+        <PinnedItemInfo parentTag="java.util.ArrayList" memberName="size" />
+        <PinnedItemInfo parentTag="ru.hse.cinema.dao.InMemoryTicketDao" memberName="soldTickets" />
+      </pinned-members>
+    </pin-to-top-manager>
     <watches-manager>
       <configuration name="JetRunConfigurationType">
         <watch expression="((SessionEntity)((java.util.ArrayList)((InMemorySessionDao)sessionDao).sessions).get(0)).timeStart" custom="ru.hse.cinema.entity.SessionEntity,ru.hse.cinema.dao.InMemorySessionDao,java.util.ArrayList" />
         <watch expression="session2" />
+        <watch expression="place" />
       </configuration>
     </watches-manager>
   </component>

@@ -2,6 +2,8 @@ package ru.hse.cinema.dao
 
 import ru.hse.cinema.entity.MovieEntity
 import ru.hse.cinema.entity.SessionEntity
+import ru.hse.cinema.entity.PlaceEntity
+import ru.hse.cinema.entity.TicketEntity
 import java.util.*
 
 class InMemorySessionDao : SessionDao{
@@ -20,4 +22,10 @@ class InMemorySessionDao : SessionDao{
             it.timeStart = newDate
         }
     }
+
+    override fun getFreePlaces(session: SessionEntity) : List<PlaceEntity> {
+        return session.places.filter { it.usage }
+        TODO("нихуя не работает это место")
+    }
+
 }

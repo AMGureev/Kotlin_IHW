@@ -17,4 +17,5 @@ class InMemoryTicketDao : TicketDao {
     override fun getTicketsForSession(session: SessionEntity): List<TicketEntity> {
         return soldTickets.filter { it.session == session }
     }
+
 }
