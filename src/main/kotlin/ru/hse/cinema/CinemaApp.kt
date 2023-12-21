@@ -1,63 +1,117 @@
 package ru.hse.cinema
 
 import ru.hse.cinema.dao.MovieDao
-import ru.hse.cinema.dao.PlaceDao
 import ru.hse.cinema.dao.SessionDao
 import ru.hse.cinema.dao.TicketDao
 import ru.hse.cinema.entity.MovieEntity
-import ru.hse.cinema.entity.PlaceEntity
 import ru.hse.cinema.entity.SessionEntity
-import ru.hse.cinema.entity.TicketEntity
 import java.util.*
 
 class CinemaApp(
     private val movieDao: MovieDao,
     private val ticketDao: TicketDao,
     private val sessionDao: SessionDao,
-    private val placeDao: PlaceDao
 ) {
-
-    fun run() {
-        // Здесь можно реализовать цикл взаимодействия с пользователем
+    fun createSession(title: String, date: Date) {
+        if (movieDao.isMovie(title)) {
+            sessionDao.addSession(SessionEntity(sessionDao.getID(), movieDao.returnMovieByName(title), date))
+            println("Сессия успешно создана!")
+        } else {
+            println("Такого фильма нет!")
+        }
     }
 
-    fun sellTicket(session: SessionEntity, seatNumber: PlaceEntity, price: Double) {
-        val ticket = TicketEntity(session, seatNumber, price)
-        ticketDao.sellTicket(ticket)
-        placeDao.takeThePlace(seatNumber)
+    fun createMovie(title: String, time: Int) {
+        movieDao.addMovie(MovieEntity(title, time))
+        println("Фильм успешно создан!")
     }
 
-    fun returnTicket(ticket: TicketEntity) {
-        ticketDao.returnTicket(ticket)
-        placeDao.freeUpSpace(ticket.seatNumber)
+    fun buyTicket(id: Int, num: Int) {
+        if (sessionDao.isSession(id)) {
+            if (ticketDao.ticketIsSold(sessionDao.returnSessionById(id).tickets[num - 1])) {
+                println("Билет уже был куплен!")
+            } else {
+                ticketDao.sellTicket(sessionDao.returnSessionById(id).tickets[num - 1])
+                println("Билет успешно куплен!")
+            }
+        } else {
+            println("Сессия не найдена! - продажа билета недоступна")
+        }
     }
 
-    fun addMovie(movie: MovieEntity) {
-        movieDao.addMovie(movie)
+    fun returnTicket(id: Int, num: Int) {
+        if (sessionDao.isSession(id)) {
+            if (ticketDao.ticketIsSold(sessionDao.returnSessionById(id).tickets[num - 1])) {
+                if (sessionDao.returnSessionById(id).tickets[num - 1].activation) {
+                    println("Билет нельзя вернуть! - он уже был активирован")
+                } else {
+                    ticketDao.returnTicket(sessionDao.returnSessionById(id).tickets[num - 1])
+                    println("Билет успешно возвращен! Ваши деньги поступят на карту в течение 7 рабочих дней!")
+                }
+            } else {
+                println("Не удалось вернуть билет - он не был куплен!")
+            }
+        } else {
+            println("Сессия не найдена! - возврат билета не произведен")
+        }
     }
 
-    fun addSession(movie: MovieEntity, startTime: Date) {
-        val session = SessionEntity(movie, startTime)
-        sessionDao.addSession(session)
+    fun returnTicketsById(id: Int, access: Boolean) {
+        if (sessionDao.isSession(id)) {
+            if (access) {
+                sessionDao.returnSessionById(id).tickets
+                val unsoldTickets = sessionDao.returnSessionById(id).tickets.filter { ticket ->
+                    ticket !in ticketDao.returnSoldTicketsById(id)
+                }
+                println(unsoldTickets.joinToString())
+            } else {
+                println(ticketDao.returnSoldTicketsById(id).joinToString())
+            }
+        } else {
+            println("Сессия не найдена! - списка билетов нет")
+        }
     }
 
-    fun deleteSession(session: SessionEntity) {
-        val ticketsForSession = ticketDao.getTicketsForSession(session)
-        ticketsForSession.forEach { ticketDao.returnTicket(it) }
-        sessionDao.deleteSession(session)
+    fun activationTicket(id: Int, num: Int) {
+        if (sessionDao.isSession(id)) {
+            if (sessionDao.returnSessionById(id).tickets[num - 1] in ticketDao.returnSoldTicketsById(id)) {
+                if (sessionDao.returnSessionById(id).tickets[num - 1].activation) {
+                    println("Ошибка! - попытка повторной активации билета")
+                } else {
+                    ticketDao.activationTicket(sessionDao.returnSessionById(id).tickets[num - 1])
+                    println("Билет успешно активирован! Приятного просмотра!")
+                }
+            } else {
+                println("Билет не был куплен! - вас пытаются взломать")
+            }
+        } else {
+            println("Сессия не найдена! - вас пытаются взломать")
+        }
     }
 
-    fun editSession(session: SessionEntity, newDate: Date) {
-        sessionDao.editSession(session, newDate)
+    fun editMovieInformation(oldTitle: String, newTitle: String, newDuration: Int) {
+        var newTitle = newTitle
+        var newDuration = newDuration
+        if (movieDao.isMovie(oldTitle)) {
+            if (newTitle == ""){
+                newTitle = oldTitle
+            }
+            if (newDuration == 0){
+                newDuration = movieDao.returnMovieByName(oldTitle).duration
+            }
+            movieDao.editMovieInformation(movieDao.returnMovieByName(oldTitle), newTitle, newDuration)
+            println("Информация о фильме успешно изменена!")
+        } else {
+            println("Ошибка! - попытка редактирования несуществующего фильма")
+        }
     }
 
-    fun editMovie(updatedMovie: MovieEntity, newDuration: Int) {
-        movieDao.editMovie(updatedMovie, newDuration)
-    }
-    fun getTicketsForSession(session: SessionEntity){
-        getTicketsForSession(session)
-    }
-    fun getFreePlaces(session: SessionEntity){
-        getFreePlaces(session)
+    fun editSessionInformation(id: Int, newDate: Date) {
+        if (sessionDao.isSession(id)) {
+            sessionDao.editSession(sessionDao.returnSessionById(id), newDate)
+            println("Информация о сессии успешно изменена!")
+        } else {
+            println("Сессия не найдена! - сессия не может быть отредактирована")
+        }
     }
 }

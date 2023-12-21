@@ -1,8 +1,6 @@
 package ru.hse.cinema.dao
 
 import ru.hse.cinema.entity.TicketEntity
-import ru.hse.cinema.entity.SessionEntity
-import java.util.*
 
 class InMemoryTicketDao : TicketDao {
     private val soldTickets = mutableListOf<TicketEntity>()
@@ -14,8 +12,20 @@ class InMemoryTicketDao : TicketDao {
         soldTickets.remove(ticket)
     }
 
-    override fun getTicketsForSession(session: SessionEntity): List<TicketEntity> {
-        return soldTickets.filter { it.session == session }
+    override fun ticketIsSold(ticket: TicketEntity): Boolean {
+        if (ticket in soldTickets) {
+            return true
+        }
+        return false
     }
 
+    override fun returnSoldTicketsById(id: Int): List<TicketEntity> {
+        return soldTickets.filter { ticket ->
+            ticket.session.id == id
+        }
+    }
+
+    override fun activationTicket(ticket: TicketEntity) {
+        ticket.activation = true
+    }
 }

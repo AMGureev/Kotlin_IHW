@@ -1,7 +1,6 @@
 package ru.hse.cinema.dao
 
 import ru.hse.cinema.entity.MovieEntity
-import java.time.Duration
 
 class InMemoryMovieDao : MovieDao {
     private val movies = mutableListOf<MovieEntity>()
@@ -18,10 +17,16 @@ class InMemoryMovieDao : MovieDao {
         movies.remove(movie)
     }
 
-    override fun editMovie(updatedMovie: MovieEntity, newDuration: Int) {
-        val existingMovie = movies.find { it.title == updatedMovie.title }
-        existingMovie?.let {
-            it.duration = newDuration
-        }
+    override fun isMovie(name: String): Boolean {
+        return movies.any { it.title == name }
+    }
+
+    override fun returnMovieByName(name: String): MovieEntity {
+        return movies.find { it.title == name }!!
+    }
+
+    override fun editMovieInformation(movie: MovieEntity, newTitle: String, newDuration: Int) {
+        movie.title = newTitle
+        movie.duration = newDuration
     }
 }
