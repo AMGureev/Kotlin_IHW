@@ -40,11 +40,19 @@ class CinemaApp(
     }
 
     fun createMovie(title: String, time: Int) {
-        if (!movieDao.isMovie(title)) {
-            movieDao.addMovie(MovieEntity(title, time))
-            println("The movie has been created!")
+        if (time <= 0){
+            println("Error! - the duration of the movie cannot be negative")
         } else {
-            println("Error! - the movie with title already exists")
+            if (!movieDao.isMovie(title)) {
+                if (title.isEmpty()){
+                    println("Error! - the title is empty")
+                } else {
+                    movieDao.addMovie(MovieEntity(title, time))
+                    println("The movie has been created!")
+                }
+            } else {
+                println("Error! - the movie with title already exists")
+            }
         }
     }
 
@@ -132,14 +140,18 @@ class CinemaApp(
             if (movieDao.isMovie(newTitle)) {
                 println("Error! - a movie with this title already exists")
             } else {
-                if (newTitle == "") {
-                    newTitle = oldTitle
+                if (newDuration < 0){
+                    println("Error! - the duration of the movie cannot be negative")
+                } else {
+                    if (newTitle == "") {
+                        newTitle = oldTitle
+                    }
+                    if (newDuration == 0) {
+                        newDuration = movieDao.returnMovieByName(oldTitle).duration
+                    }
+                    movieDao.editMovieInformation(movieDao.returnMovieByName(oldTitle), newTitle, newDuration)
+                    println("Movie information has been successfully updated!")
                 }
-                if (newDuration == 0) {
-                    newDuration = movieDao.returnMovieByName(oldTitle).duration
-                }
-                movieDao.editMovieInformation(movieDao.returnMovieByName(oldTitle), newTitle, newDuration)
-                println("Movie information has been successfully updated!")
             }
         } else {
             println("Error! - attempting to edit a non-exists movie")
@@ -180,8 +192,12 @@ class CinemaApp(
     }
 
     fun prettySessionsOutput() {
-        for (index in sessionDao.getAllSessions().indices) {
-            println("Session ID: ${sessionDao.getAllSessions()[index].id}; movie: ${sessionDao.getAllSessions()[index].movie}; time start: ${sessionDao.getAllSessions()[index].timeStart}")
+        if (sessionDao.getAllSessions().isEmpty()){
+            println("There are no sessions")
+        } else{
+            for (index in sessionDao.getAllSessions().indices) {
+                println("Session ID: ${sessionDao.getAllSessions()[index].id}; movie: ${sessionDao.getAllSessions()[index].movie.title}; time start: ${sessionDao.getAllSessions()[index].timeStart}")
+            }
         }
     }
 }
