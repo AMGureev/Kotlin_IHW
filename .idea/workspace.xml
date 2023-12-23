@@ -5,20 +5,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="305b20b7-14d2-46a0-a3f0-de78395dd8ec" name="Changes" comment="first - looping in the search for free places&#10;second - changing the availability of a place does not work&#10;third - &#10;it can generate tickets for the session and create fields for them purchased not purchased">
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_12_12_2023_13_33_[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_12_12_2023_13_33__Changes_.xml" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/accounts/accounts.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/movies/movie.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sessions/session.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/AccountService.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/AccountDao.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/InMemoryAccountDao.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tickets/soldTickets.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/CinemaApp.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/CinemaApp.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/Main.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/InMemoryMovieDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/InMemoryMovieDao.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/InMemoryPlaceDao.kt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/InMemorySessionDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/InMemorySessionDao.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/InMemoryTicketDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/InMemoryTicketDao.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/MovieDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/MovieDao.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/PlaceDao.kt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/SessionDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/SessionDao.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/TicketDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/TicketDao.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/entity/PlaceEntity.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/entity/AccountEntity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/entity/AccountEntity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/entity/MovieEntity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/entity/MovieEntity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/entity/PasswordEntity.kt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/entity/SessionEntity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/entity/SessionEntity.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/entity/TicketEntity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/entity/TicketEntity.kt" afterDir="false" />
     </list>
@@ -32,13 +38,26 @@
       <ProjectState />
     </projectState>
   </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <projects_view>
+          <tree_state>
+            <expand />
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Kotlin Interface" />
         <option value="Class" />
         <option value="Kotlin Data Class" />
+        <option value="Kotlin Interface" />
         <option value="Kotlin Class" />
+        <option value="UML Object" />
       </list>
     </option>
   </component>
@@ -60,10 +79,13 @@
   <component name="GithubPullRequestsUISettings">
     <option name="selectedUrlAndAccountId">
       <UrlAndAccount>
-        <option name="accountId" value="cc777726-a671-4c79-adff-59bdede82d16" />
+        <option name="accountId" value="7e264211-c685-440e-90b1-c171dc07e14c" />
         <option name="url" value="https://github.com/AMGureev/Kotlin_IHW.git" />
       </UrlAndAccount>
     </option>
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.module/jackson-module-kotlin/2.13.0/9870e0689d0d6478656c995cc150bd80ab46f27c/jackson-module-kotlin-2.13.0-sources.jar!/com/fasterxml/jackson/module/kotlin/Extensions.kt" root0="SKIP_INSPECTION" />
   </component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
@@ -72,24 +94,34 @@
   &quot;associatedIndex&quot;: 0
 }</component>
   <component name="ProjectId" id="2ZRBp3QFSyncsBPhVfUANBkupI0" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "DefaultPlantUmlFileTemplate": "UML Object",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "d5297501",
+    "git-widget-placeholder": "c5c56d9c",
+    "last_opened_file_path": "/Users/alexgureev/IdeaProjects/Kotlin_IHW/sessions",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
-    "settings.editor.selected.configurable": "proofread",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/sessions" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="MainKt" type="JetRunConfigurationType" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="ru.hse.cinema.MainKt" />
@@ -100,6 +132,8 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Kotlin.MainKt" />
+        <item itemvalue="Kotlin.MainKt" />
         <item itemvalue="Kotlin.MainKt" />
         <item itemvalue="Kotlin.MainKt" />
         <item itemvalue="Kotlin.MainKt" />
@@ -198,6 +232,7 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="create" />
     <MESSAGE value="first mini changes" />
     <MESSAGE value="third  changes" />
