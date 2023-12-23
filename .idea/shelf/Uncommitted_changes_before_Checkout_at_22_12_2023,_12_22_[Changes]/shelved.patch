@@ -1,0 +1,137 @@
+Index: src/main/kotlin/ru/hse/cinema/dao/InMemorySessionDao.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package ru.hse.cinema.dao\n\nimport ru.hse.cinema.entity.MovieEntity\nimport ru.hse.cinema.entity.SessionEntity\nimport java.util.*\n\nclass InMemorySessionDao : SessionDao {\n    private var countID = 0\n    private val sessions = mutableListOf<SessionEntity>()\n    override fun addSession(session: SessionEntity) {\n        sessions.add(session)\n    }\n\n    override fun getID(): Int {\n        return countID++\n    }\n\n    override fun isSession(id: Int): Boolean {\n        return sessions.any { it.id == id }\n    }\n\n    override fun returnSessionById(id: Int): SessionEntity {\n        return sessions.find { it.id == id }!!\n    }\n\n    override fun deleteSession(session: SessionEntity) {\n        sessions.remove(session)\n    }\n\n    override fun editSession(session: SessionEntity, newDate: Date) {\n        session.timeStart = newDate\n    }\n\n    override fun getAllSessions(session: SessionEntity): List<SessionEntity> {\n        return sessions.toList()\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/kotlin/ru/hse/cinema/dao/InMemorySessionDao.kt b/src/main/kotlin/ru/hse/cinema/dao/InMemorySessionDao.kt
+--- a/src/main/kotlin/ru/hse/cinema/dao/InMemorySessionDao.kt	(revision c5c56d9c3994833dc875af9a4b89582ff9166a8f)
++++ b/src/main/kotlin/ru/hse/cinema/dao/InMemorySessionDao.kt	(date 1703235711802)
+@@ -1,6 +1,5 @@
+ package ru.hse.cinema.dao
+ 
+-import ru.hse.cinema.entity.MovieEntity
+ import ru.hse.cinema.entity.SessionEntity
+ import java.util.*
+ 
+Index: src/main/kotlin/ru/hse/cinema/CinemaApp.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package ru.hse.cinema\n\nimport ru.hse.cinema.dao.MovieDao\nimport ru.hse.cinema.dao.SessionDao\nimport ru.hse.cinema.dao.TicketDao\nimport ru.hse.cinema.entity.MovieEntity\nimport ru.hse.cinema.entity.SessionEntity\nimport java.util.*\n\nclass CinemaApp(\n    private val movieDao: MovieDao,\n    private val ticketDao: TicketDao,\n    private val sessionDao: SessionDao,\n) {\n    fun createSession(title: String, date: Date) {\n        if (movieDao.isMovie(title)) {\n            sessionDao.addSession(SessionEntity(sessionDao.getID(), movieDao.returnMovieByName(title), date))\n            println(\"Сессия успешно создана!\")\n        } else {\n            println(\"Такого фильма нет!\")\n        }\n    }\n\n    fun createMovie(title: String, time: Int) {\n        movieDao.addMovie(MovieEntity(title, time))\n        println(\"Фильм успешно создан!\")\n    }\n\n    fun buyTicket(id: Int, num: Int) {\n        if (sessionDao.isSession(id)) {\n            if (ticketDao.ticketIsSold(sessionDao.returnSessionById(id).tickets[num - 1])) {\n                println(\"Билет уже был куплен!\")\n            } else {\n                ticketDao.sellTicket(sessionDao.returnSessionById(id).tickets[num - 1])\n                println(\"Билет успешно куплен!\")\n            }\n        } else {\n            println(\"Сессия не найдена! - продажа билета недоступна\")\n        }\n    }\n\n    fun returnTicket(id: Int, num: Int) {\n        if (sessionDao.isSession(id)) {\n            if (ticketDao.ticketIsSold(sessionDao.returnSessionById(id).tickets[num - 1])) {\n                if (sessionDao.returnSessionById(id).tickets[num - 1].activation) {\n                    println(\"Билет нельзя вернуть! - он уже был активирован\")\n                } else {\n                    ticketDao.returnTicket(sessionDao.returnSessionById(id).tickets[num - 1])\n                    println(\"Билет успешно возвращен! Ваши деньги поступят на карту в течение 7 рабочих дней!\")\n                }\n            } else {\n                println(\"Не удалось вернуть билет - он не был куплен!\")\n            }\n        } else {\n            println(\"Сессия не найдена! - возврат билета не произведен\")\n        }\n    }\n\n    fun returnTicketsById(id: Int, access: Boolean) {\n        if (sessionDao.isSession(id)) {\n            if (access) {\n                sessionDao.returnSessionById(id).tickets\n                val unsoldTickets = sessionDao.returnSessionById(id).tickets.filter { ticket ->\n                    ticket !in ticketDao.returnSoldTicketsById(id)\n                }\n                println(unsoldTickets.joinToString())\n            } else {\n                println(ticketDao.returnSoldTicketsById(id).joinToString())\n            }\n        } else {\n            println(\"Сессия не найдена! - списка билетов нет\")\n        }\n    }\n\n    fun activationTicket(id: Int, num: Int) {\n        if (sessionDao.isSession(id)) {\n            if (sessionDao.returnSessionById(id).tickets[num - 1] in ticketDao.returnSoldTicketsById(id)) {\n                if (sessionDao.returnSessionById(id).tickets[num - 1].activation) {\n                    println(\"Ошибка! - попытка повторной активации билета\")\n                } else {\n                    ticketDao.activationTicket(sessionDao.returnSessionById(id).tickets[num - 1])\n                    println(\"Билет успешно активирован! Приятного просмотра!\")\n                }\n            } else {\n                println(\"Билет не был куплен! - вас пытаются взломать\")\n            }\n        } else {\n            println(\"Сессия не найдена! - вас пытаются взломать\")\n        }\n    }\n\n    fun editMovieInformation(oldTitle: String, newTitle: String, newDuration: Int) {\n        var newTitle = newTitle\n        var newDuration = newDuration\n        if (movieDao.isMovie(oldTitle)) {\n            if (newTitle == \"\"){\n                newTitle = oldTitle\n            }\n            if (newDuration == 0){\n                newDuration = movieDao.returnMovieByName(oldTitle).duration\n            }\n            movieDao.editMovieInformation(movieDao.returnMovieByName(oldTitle), newTitle, newDuration)\n            println(\"Информация о фильме успешно изменена!\")\n        } else {\n            println(\"Ошибка! - попытка редактирования несуществующего фильма\")\n        }\n    }\n\n    fun editSessionInformation(id: Int, newDate: Date) {\n        if (sessionDao.isSession(id)) {\n            sessionDao.editSession(sessionDao.returnSessionById(id), newDate)\n            println(\"Информация о сессии успешно изменена!\")\n        } else {\n            println(\"Сессия не найдена! - сессия не может быть отредактирована\")\n        }\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/kotlin/ru/hse/cinema/CinemaApp.kt b/src/main/kotlin/ru/hse/cinema/CinemaApp.kt
+--- a/src/main/kotlin/ru/hse/cinema/CinemaApp.kt	(revision c5c56d9c3994833dc875af9a4b89582ff9166a8f)
++++ b/src/main/kotlin/ru/hse/cinema/CinemaApp.kt	(date 1703236351968)
+@@ -23,7 +23,6 @@
+ 
+     fun createMovie(title: String, time: Int) {
+         movieDao.addMovie(MovieEntity(title, time))
+-        println("Фильм успешно создан!")
+     }
+ 
+     fun buyTicket(id: Int, num: Int) {
+Index: build.gradle.kts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>plugins {\n    kotlin(\"jvm\") version \"1.9.20\"\n    application\n}\n\ngroup = \"ru.hse\"\nversion = \"1.0-SNAPSHOT\"\n\nrepositories {\n    mavenCentral()\n}\n\ndependencies {\n    // https://mvnrepository.com/artifact/commons-io/commons-io\n    implementation(\"commons-io:commons-io:2.15.1\")\n    testImplementation(kotlin(\"test\"))\n}\n\ntasks.test {\n    useJUnitPlatform()\n}\n\nkotlin {\n    jvmToolchain(8)\n}\n\napplication {\n    mainClass.set(\"MainKt\")\n}\n\ntasks.jar {\n    duplicatesStrategy = DuplicatesStrategy.EXCLUDE\n\n    manifest.attributes[\"Main-Class\"] = application.mainClass\n\n    configurations[\"compileClasspath\"].forEach {\n        from(zipTree(it.absolutePath))\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/build.gradle.kts b/build.gradle.kts
+--- a/build.gradle.kts	(revision c5c56d9c3994833dc875af9a4b89582ff9166a8f)
++++ b/build.gradle.kts	(date 1703235407806)
+@@ -13,6 +13,7 @@
+ dependencies {
+     // https://mvnrepository.com/artifact/commons-io/commons-io
+     implementation("commons-io:commons-io:2.15.1")
++    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2")
+     testImplementation(kotlin("test"))
+ }
+ 
+Index: src/main/kotlin/ru/hse/cinema/entity/MovieEntity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package ru.hse.cinema.entity\n\ndata class MovieEntity(\n    var title: String,\n    var duration: Int // продолжительность фильма\n)
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/kotlin/ru/hse/cinema/entity/MovieEntity.kt b/src/main/kotlin/ru/hse/cinema/entity/MovieEntity.kt
+--- a/src/main/kotlin/ru/hse/cinema/entity/MovieEntity.kt	(revision c5c56d9c3994833dc875af9a4b89582ff9166a8f)
++++ b/src/main/kotlin/ru/hse/cinema/entity/MovieEntity.kt	(date 1703236908897)
+@@ -1,5 +1,7 @@
+ package ru.hse.cinema.entity
++import kotlinx.serialization.*
+ 
++@Serializable
+ data class MovieEntity(
+     var title: String,
+     var duration: Int // продолжительность фильма
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"AutoImportSettings\">\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\n  </component>\n  <component name=\"ChangeListManager\">\n    <list default=\"true\" id=\"305b20b7-14d2-46a0-a3f0-de78395dd8ec\" name=\"Changes\" comment=\"first - looping in the search for free places&#10;second - changing the availability of a place does not work&#10;third - &#10;it can generate tickets for the session and create fields for them purchased not purchased\">\n      <change beforePath=\"$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_12_12_2023_13_33_[Changes]/shelved.patch\" beforeDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_12_12_2023_13_33__Changes_.xml\" beforeDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/CinemaApp.kt\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/CinemaApp.kt\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/Main.kt\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/Main.kt\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/InMemoryMovieDao.kt\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/InMemoryMovieDao.kt\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/InMemoryPlaceDao.kt\" beforeDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/InMemorySessionDao.kt\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/InMemorySessionDao.kt\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/InMemoryTicketDao.kt\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/InMemoryTicketDao.kt\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/MovieDao.kt\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/MovieDao.kt\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/PlaceDao.kt\" beforeDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/SessionDao.kt\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/SessionDao.kt\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/TicketDao.kt\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/TicketDao.kt\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/entity/PlaceEntity.kt\" beforeDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/entity/SessionEntity.kt\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/entity/SessionEntity.kt\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/entity/TicketEntity.kt\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/entity/TicketEntity.kt\" afterDir=\"false\" />\n    </list>\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\n  </component>\n  <component name=\"ExternalProjectsData\">\n    <projectState path=\"$PROJECT_DIR$\">\n      <ProjectState />\n    </projectState>\n  </component>\n  <component name=\"FileTemplateManagerImpl\">\n    <option name=\"RECENT_TEMPLATES\">\n      <list>\n        <option value=\"Kotlin Interface\" />\n        <option value=\"Class\" />\n        <option value=\"Kotlin Data Class\" />\n        <option value=\"Kotlin Class\" />\n      </list>\n    </option>\n  </component>\n  <component name=\"Git.Settings\">\n    <option name=\"RECENT_BRANCH_BY_REPOSITORY\">\n      <map>\n        <entry key=\"$PROJECT_DIR$\" value=\"a94de27339f419ac9daeb9468eb1cd700c074382\" />\n      </map>\n    </option>\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\n    <option name=\"UPDATE_TYPE\" value=\"REBASE\" />\n  </component>\n  <component name=\"GitHubPullRequestSearchHistory\">{\n  &quot;lastFilter&quot;: {\n    &quot;state&quot;: &quot;OPEN&quot;,\n    &quot;assignee&quot;: &quot;AMGureev&quot;\n  }\n}</component>\n  <component name=\"GithubPullRequestsUISettings\">\n    <option name=\"selectedUrlAndAccountId\">\n      <UrlAndAccount>\n        <option name=\"accountId\" value=\"cc777726-a671-4c79-adff-59bdede82d16\" />\n        <option name=\"url\" value=\"https://github.com/AMGureev/Kotlin_IHW.git\" />\n      </UrlAndAccount>\n    </option>\n  </component>\n  <component name=\"ProblemsViewState\">\n    <option name=\"selectedTabId\" value=\"CurrentFile\" />\n  </component>\n  <component name=\"ProjectColorInfo\">{\n  &quot;associatedIndex&quot;: 0\n}</component>\n  <component name=\"ProjectId\" id=\"2ZRBp3QFSyncsBPhVfUANBkupI0\" />\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\" />\n  <component name=\"ProjectViewState\">\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\n    <option name=\"showLibraryContents\" value=\"true\" />\n  </component>\n  <component name=\"PropertiesComponent\"><![CDATA[{\n  \"keyToString\": {\n    \"SHARE_PROJECT_CONFIGURATION_FILES\": \"true\",\n    \"WebServerToolWindowFactoryState\": \"false\",\n    \"git-widget-placeholder\": \"d5297501\",\n    \"node.js.detected.package.eslint\": \"true\",\n    \"node.js.detected.package.tslint\": \"true\",\n    \"node.js.selected.package.eslint\": \"(autodetect)\",\n    \"node.js.selected.package.tslint\": \"(autodetect)\",\n    \"settings.editor.selected.configurable\": \"proofread\",\n    \"vue.rearranger.settings.migration\": \"true\"\n  }\n}]]></component>\n  <component name=\"RunManager\">\n    <configuration name=\"MainKt\" type=\"JetRunConfigurationType\" temporary=\"true\" nameIsGenerated=\"true\">\n      <option name=\"MAIN_CLASS_NAME\" value=\"ru.hse.cinema.MainKt\" />\n      <module name=\"Kotlin_IHW.main\" />\n      <method v=\"2\">\n        <option name=\"Make\" enabled=\"true\" />\n      </method>\n    </configuration>\n    <recent_temporary>\n      <list>\n        <item itemvalue=\"Kotlin.MainKt\" />\n        <item itemvalue=\"Kotlin.MainKt\" />\n        <item itemvalue=\"Kotlin.MainKt\" />\n      </list>\n    </recent_temporary>\n  </component>\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\n  <component name=\"TaskManager\">\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\n      <changelist id=\"305b20b7-14d2-46a0-a3f0-de78395dd8ec\" name=\"Changes\" comment=\"\" />\n      <created>1702375192804</created>\n      <option name=\"number\" value=\"Default\" />\n      <option name=\"presentableId\" value=\"Default\" />\n      <updated>1702375192804</updated>\n      <workItem from=\"1702408682902\" duration=\"5858000\" />\n      <workItem from=\"1702464033550\" duration=\"339000\" />\n      <workItem from=\"1702465101996\" duration=\"4608000\" />\n      <workItem from=\"1702481107558\" duration=\"1222000\" />\n      <workItem from=\"1702496575287\" duration=\"1255000\" />\n      <workItem from=\"1702500550716\" duration=\"5793000\" />\n      <workItem from=\"1702553497991\" duration=\"2873000\" />\n      <workItem from=\"1703150107819\" duration=\"1487000\" />\n      <workItem from=\"1703168747014\" duration=\"25415000\" />\n    </task>\n    <task id=\"LOCAL-00001\" summary=\"create\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1702375230091</created>\n      <option name=\"number\" value=\"00001\" />\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1702375230091</updated>\n    </task>\n    <task id=\"LOCAL-00002\" summary=\"first mini changes\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1702375522060</created>\n      <option name=\"number\" value=\"00002\" />\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1702375522060</updated>\n    </task>\n    <task id=\"LOCAL-00003\" summary=\"second changes\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1702385749174</created>\n      <option name=\"number\" value=\"00003\" />\n      <option name=\"presentableId\" value=\"LOCAL-00003\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1702385749174</updated>\n    </task>\n    <task id=\"LOCAL-00004\" summary=\"third changes\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1702392355071</created>\n      <option name=\"number\" value=\"00004\" />\n      <option name=\"presentableId\" value=\"LOCAL-00004\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1702392355071</updated>\n    </task>\n    <task id=\"LOCAL-00005\" summary=\"fourth changes\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1702418399369</created>\n      <option name=\"number\" value=\"00005\" />\n      <option name=\"presentableId\" value=\"LOCAL-00005\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1702418399369</updated>\n    </task>\n    <task id=\"LOCAL-00006\" summary=\"fourth changes\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1702468542951</created>\n      <option name=\"number\" value=\"00006\" />\n      <option name=\"presentableId\" value=\"LOCAL-00006\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1702468542951</updated>\n    </task>\n    <task id=\"LOCAL-00007\" summary=\"first - looping in the search for free places&#10;second - changing the availability of a place does not work&#10;third - &#10;it can generate tickets for the session and create fields for them purchased not purchased\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1702506320849</created>\n      <option name=\"number\" value=\"00007\" />\n      <option name=\"presentableId\" value=\"LOCAL-00007\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1702506320849</updated>\n    </task>\n    <option name=\"localTasksCounter\" value=\"8\" />\n    <servers />\n  </component>\n  <component name=\"TypeScriptGeneratedFilesManager\">\n    <option name=\"version\" value=\"3\" />\n  </component>\n  <component name=\"Vcs.Log.Tabs.Properties\">\n    <option name=\"TAB_STATES\">\n      <map>\n        <entry key=\"MAIN\">\n          <value>\n            <State />\n          </value>\n        </entry>\n      </map>\n    </option>\n  </component>\n  <component name=\"VcsManagerConfiguration\">\n    <MESSAGE value=\"create\" />\n    <MESSAGE value=\"first mini changes\" />\n    <MESSAGE value=\"third  changes\" />\n    <MESSAGE value=\"second changes\" />\n    <MESSAGE value=\"third changes\" />\n    <MESSAGE value=\"fourth changes\" />\n    <MESSAGE value=\"first - looping in the search for free places&#10;second - changing the availability of a place does not work&#10;third - &#10;it can generate tickets for the session and create fields for them purchased not purchased\" />\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"first - looping in the search for free places&#10;second - changing the availability of a place does not work&#10;third - &#10;it can generate tickets for the session and create fields for them purchased not purchased\" />\n  </component>\n  <component name=\"XDebuggerManager\">\n    <pin-to-top-manager>\n      <pinned-members>\n        <PinnedItemInfo parentTag=\"ru.hse.cinema.entity.SessionEntity\" memberName=\"places\" />\n        <PinnedItemInfo parentTag=\"ru.hse.cinema.dao.InMemorySessionDao\" memberName=\"sessions\" />\n        <PinnedItemInfo parentTag=\"java.util.ArrayList\" memberName=\"size\" />\n        <PinnedItemInfo parentTag=\"ru.hse.cinema.dao.InMemoryTicketDao\" memberName=\"soldTickets\" />\n      </pinned-members>\n    </pin-to-top-manager>\n  </component>\n  <component name=\"XSLT-Support.FileAssociations.UIState\">\n    <expand />\n    <select />\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision c5c56d9c3994833dc875af9a4b89582ff9166a8f)
++++ b/.idea/workspace.xml	(date 1703236865573)
+@@ -5,22 +5,11 @@
+   </component>
+   <component name="ChangeListManager">
+     <list default="true" id="305b20b7-14d2-46a0-a3f0-de78395dd8ec" name="Changes" comment="first - looping in the search for free places&#10;second - changing the availability of a place does not work&#10;third - &#10;it can generate tickets for the session and create fields for them purchased not purchased">
+-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_12_12_2023_13_33_[Changes]/shelved.patch" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_12_12_2023_13_33__Changes_.xml" beforeDir="false" />
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/CinemaApp.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/CinemaApp.kt" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/Main.kt" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/InMemoryMovieDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/InMemoryMovieDao.kt" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/InMemoryPlaceDao.kt" beforeDir="false" />
+       <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/InMemorySessionDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/InMemorySessionDao.kt" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/InMemoryTicketDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/InMemoryTicketDao.kt" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/MovieDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/MovieDao.kt" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/PlaceDao.kt" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/SessionDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/SessionDao.kt" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/TicketDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/dao/TicketDao.kt" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/entity/PlaceEntity.kt" beforeDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/entity/SessionEntity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/entity/SessionEntity.kt" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/entity/TicketEntity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/entity/TicketEntity.kt" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/entity/MovieEntity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/ru/hse/cinema/entity/MovieEntity.kt" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -32,6 +21,21 @@
+       <ProjectState />
+     </projectState>
+   </component>
++  <component name="ExternalProjectsManager">
++    <system id="GRADLE">
++      <state>
++        <task path="$PROJECT_DIR$">
++          <activation />
++        </task>
++        <projects_view>
++          <tree_state>
++            <expand />
++            <select />
++          </tree_state>
++        </projects_view>
++      </state>
++    </system>
++  </component>
+   <component name="FileTemplateManagerImpl">
+     <option name="RECENT_TEMPLATES">
+       <list>
+@@ -81,7 +85,7 @@
+   "keyToString": {
+     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+     "WebServerToolWindowFactoryState": "false",
+-    "git-widget-placeholder": "d5297501",
++    "git-widget-placeholder": "c5c56d9c",
+     "node.js.detected.package.eslint": "true",
+     "node.js.detected.package.tslint": "true",
+     "node.js.selected.package.eslint": "(autodetect)",

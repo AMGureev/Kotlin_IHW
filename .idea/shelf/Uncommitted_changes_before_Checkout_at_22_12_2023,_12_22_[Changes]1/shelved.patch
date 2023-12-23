@@ -1,0 +1,53 @@
+Index: build.gradle.kts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>plugins {\n    kotlin(\"jvm\") version \"1.9.20\"\n    application\n}\n\ngroup = \"ru.hse\"\nversion = \"1.0-SNAPSHOT\"\n\nrepositories {\n    mavenCentral()\n}\n\ndependencies {\n    // https://mvnrepository.com/artifact/commons-io/commons-io\n    implementation(\"commons-io:commons-io:2.15.1\")\n    testImplementation(kotlin(\"test\"))\n}\n\ntasks.test {\n    useJUnitPlatform()\n}\n\nkotlin {\n    jvmToolchain(8)\n}\n\napplication {\n    mainClass.set(\"MainKt\")\n}\n\ntasks.jar {\n    duplicatesStrategy = DuplicatesStrategy.EXCLUDE\n\n    manifest.attributes[\"Main-Class\"] = application.mainClass\n\n    configurations[\"compileClasspath\"].forEach {\n        from(zipTree(it.absolutePath))\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/build.gradle.kts b/build.gradle.kts
+--- a/build.gradle.kts	(revision d529750133a279401dbf87089f835a7c305e4557)
++++ b/build.gradle.kts	(date 1703236929444)
+@@ -13,6 +13,7 @@
+ dependencies {
+     // https://mvnrepository.com/artifact/commons-io/commons-io
+     implementation("commons-io:commons-io:2.15.1")
++    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2")
+     testImplementation(kotlin("test"))
+ }
+ 
+Index: src/main/kotlin/ru/hse/cinema/dao/InMemorySessionDao.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package ru.hse.cinema.dao\n\nimport ru.hse.cinema.entity.MovieEntity\nimport ru.hse.cinema.entity.SessionEntity\nimport ru.hse.cinema.entity.PlaceEntity\nimport ru.hse.cinema.entity.TicketEntity\nimport java.util.*\n\nclass InMemorySessionDao : SessionDao{\n    private val sessions = mutableListOf<SessionEntity>()\n    override fun addSession(session: SessionEntity) {\n        sessions.add(session)\n    }\n\n    override fun deleteSession(session: SessionEntity) {\n        sessions.remove(session)\n    }\n\n    override fun editSession(session: SessionEntity, newDate: Date) {\n        val existingSession = sessions.find { it.timeStart == session.timeStart }\n        existingSession?.let {\n            it.timeStart = newDate\n        }\n    }\n\n    override fun getFreePlaces(session: SessionEntity) : List<PlaceEntity> {\n        return session.places.filter { it.usage }\n        TODO(\"нихуя не работает это место\")\n    }\n\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/kotlin/ru/hse/cinema/dao/InMemorySessionDao.kt b/src/main/kotlin/ru/hse/cinema/dao/InMemorySessionDao.kt
+--- a/src/main/kotlin/ru/hse/cinema/dao/InMemorySessionDao.kt	(revision d529750133a279401dbf87089f835a7c305e4557)
++++ b/src/main/kotlin/ru/hse/cinema/dao/InMemorySessionDao.kt	(date 1703236927857)
+@@ -1,6 +1,5 @@
+ package ru.hse.cinema.dao
+ 
+-import ru.hse.cinema.entity.MovieEntity
+ import ru.hse.cinema.entity.SessionEntity
+ import ru.hse.cinema.entity.PlaceEntity
+ import ru.hse.cinema.entity.TicketEntity
+Index: src/main/kotlin/ru/hse/cinema/entity/MovieEntity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package ru.hse.cinema.entity\n\ndata class MovieEntity(\n    var title: String,\n    var duration: Int // продолжительность фильма\n)
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/kotlin/ru/hse/cinema/entity/MovieEntity.kt b/src/main/kotlin/ru/hse/cinema/entity/MovieEntity.kt
+--- a/src/main/kotlin/ru/hse/cinema/entity/MovieEntity.kt	(revision d529750133a279401dbf87089f835a7c305e4557)
++++ b/src/main/kotlin/ru/hse/cinema/entity/MovieEntity.kt	(date 1703236929447)
+@@ -1,5 +1,7 @@
+ package ru.hse.cinema.entity
++import kotlinx.serialization.*
+ 
++@Serializable
+ data class MovieEntity(
+     var title: String,
+     var duration: Int // продолжительность фильма
