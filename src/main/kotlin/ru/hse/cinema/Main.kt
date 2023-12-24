@@ -9,7 +9,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.system.exitProcess
 
-fun authorizeUser(service: AccountService) {
+fun authorizeUser(service: AccountService) { // the process of user login to the application
     println("Welcome to the app!")
     while (true) {
         println("Choose one of the two actions:\n1. Sign in\n2. Register\n3. Exit")
@@ -17,7 +17,7 @@ fun authorizeUser(service: AccountService) {
         try {
             val choice = readln().toInt()
             when (choice) {
-                1 -> {
+                1 -> { // sign in
                     println("You want to sign in!")
                     println("Input login:")
                     print(">>")
@@ -31,7 +31,7 @@ fun authorizeUser(service: AccountService) {
                     }
                 }
 
-                2 -> {
+                2 -> { // register
                     println("You want to register!")
                     println("Come up with a username:")
                     print(">>")
@@ -42,7 +42,7 @@ fun authorizeUser(service: AccountService) {
                     service.registerUser(login, password)
                 }
 
-                3 -> {
+                3 -> { // exit
                     println("Goodbye!")
                     service.saveAllInformationAboutAccountsToJson()
                     exitProcess(0)
@@ -55,7 +55,7 @@ fun authorizeUser(service: AccountService) {
     }
 }
 
-fun displayWidget() {
+fun displayWidget() { // shows the available options
     println("You are on the main page")
     val mainMenuList = arrayListOf(
         "Buy ticket",
@@ -76,7 +76,7 @@ fun displayWidget() {
     print(">>")
 }
 
-fun interactionsUser(): Int {
+fun interactionsUser(): Int { // get an integer and processing it
     while (true) {
         try {
             return readln().toInt()
@@ -87,10 +87,10 @@ fun interactionsUser(): Int {
     }
 }
 
-fun processInteractionsWithUser(choice: Int, cinema: CinemaApp) {
+fun processInteractionsWithUser(choice: Int, cinema: CinemaApp) { // determining the user's choice and following instructions
     try {
         when (choice) {
-            1 -> {
+            1 -> { // buy a ticket
                 println("You want to buy a ticket!")
                 println("Enter the session ID:")
                 print(">>")
@@ -101,7 +101,7 @@ fun processInteractionsWithUser(choice: Int, cinema: CinemaApp) {
                 cinema.buyTicket(sessionId, seatNumber)
             }
 
-            2 -> {
+            2 -> { // return a ticket
                 println("You want to return a ticket!")
                 println("Enter the session ID:")
                 print(">>")
@@ -112,7 +112,7 @@ fun processInteractionsWithUser(choice: Int, cinema: CinemaApp) {
                 cinema.returnTicket(sessionId, seatNumber)
             }
 
-            3 -> {
+            3 -> { // activate a ticket
                 println("You want to activate a ticket!")
                 println("Enter the session ID:")
                 print(">>")
@@ -123,7 +123,7 @@ fun processInteractionsWithUser(choice: Int, cinema: CinemaApp) {
                 cinema.activationTicket(sessionId, seatNumber)
             }
 
-            4 -> {
+            4 -> { // see information about the session
                 println("You want to see information about the session!")
                 println("Enter the session ID:")
                 print(">>")
@@ -137,7 +137,7 @@ fun processInteractionsWithUser(choice: Int, cinema: CinemaApp) {
                 }
             }
 
-            5 -> {
+            5 -> { // create a session
                 println("You want to create a session!")
                 println("Enter the movie title:")
                 print(">>")
@@ -150,7 +150,7 @@ fun processInteractionsWithUser(choice: Int, cinema: CinemaApp) {
                 cinema.createSession(title, date)
             }
 
-            6 -> {
+            6 -> { // create a movie
                 println("You want to create a movie!")
                 println("Enter the movie title:")
                 print(">>")
@@ -161,7 +161,7 @@ fun processInteractionsWithUser(choice: Int, cinema: CinemaApp) {
                 cinema.createMovie(title, duration)
             }
 
-            7 -> {
+            7 -> { // edit a movie
                 println("You want to edit a movie!")
                 println("Enter the movie title:")
                 print(">>")
@@ -175,7 +175,7 @@ fun processInteractionsWithUser(choice: Int, cinema: CinemaApp) {
                 cinema.editMovieInformation(oldTitle, newTitle, newDuration)
             }
 
-            8 -> {
+            8 -> { // edit a session
                 println("You want to edit a session!")
                 println("Enter the session ID")
                 print(">>")
@@ -188,12 +188,12 @@ fun processInteractionsWithUser(choice: Int, cinema: CinemaApp) {
                 cinema.editSessionInformation(id, date)
             }
 
-            9 -> {
+            9 -> { // see all available sessions
                 println("You want to see all available sessions!")
                 cinema.prettySessionsOutput()
             }
 
-            10 -> {
+            10 -> { // save and exit
                 println("You have completed the program!\nGoodbye!")
                 cinema.saveAllInformationToJson()
                 exitProcess(0)
