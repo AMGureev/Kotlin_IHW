@@ -12,8 +12,8 @@ import kotlin.io.path.Path
 
 class InMemorySessionDao : SessionDao {
     private var sessions = mutableListOf<SessionEntity>()
-    private val DIRECTORY_PATH = "sessions"
-    private val FILE_NAME = "session.json"
+    private val directoryPath = "sessions"
+    private val fileName = "session.json"
     private var countID = 0
     override fun addSession(session: SessionEntity) {
         sessions.add(session)
@@ -32,8 +32,8 @@ class InMemorySessionDao : SessionDao {
     }
 
     override fun saveAllSessions() {
-        File(DIRECTORY_PATH).mkdirs()
-        val file = Path(DIRECTORY_PATH, FILE_NAME).toFile()
+        File(directoryPath).mkdirs()
+        val file = Path(directoryPath, fileName).toFile()
         val mapper = ObjectMapper()
         mapper.registerModule(JavaTimeModule())
         mapper.registerKotlinModule()
@@ -41,8 +41,8 @@ class InMemorySessionDao : SessionDao {
     }
 
     override fun fillingSessionsData() {
-        File(DIRECTORY_PATH).mkdirs()
-        val file = File(DIRECTORY_PATH, FILE_NAME)
+        File(directoryPath).mkdirs()
+        val file = File(directoryPath, fileName)
         if (!file.exists()) {
             file.createNewFile()
             file.writeText("[]")
