@@ -10,8 +10,8 @@ import kotlin.io.path.Path
 
 class InMemoryMovieDao : MovieDao {
     private var movies = mutableListOf<MovieEntity>()
-    private val DIRECTIRY_PATH = "movies"
-    private val FILE_NAME = "movie.json"
+    private val directoryPath = "movies"
+    private val fileName = "movie.json"
 
     override fun getAllMovies(): List<MovieEntity> {
         return movies.toList()
@@ -39,8 +39,8 @@ class InMemoryMovieDao : MovieDao {
     }
 
     override fun saveAllMovies() {
-        File(DIRECTIRY_PATH).mkdirs()
-        val file = Path(DIRECTIRY_PATH, FILE_NAME).toFile()
+        File(directoryPath).mkdirs()
+        val file = Path(directoryPath, fileName).toFile()
         val mapper = ObjectMapper()
         mapper.registerModule(JavaTimeModule())
         mapper.registerKotlinModule()
@@ -48,8 +48,8 @@ class InMemoryMovieDao : MovieDao {
     }
 
     override fun fillingMoviesData() {
-        File(DIRECTIRY_PATH).mkdirs()
-        val file = File(DIRECTIRY_PATH, FILE_NAME)
+        File(directoryPath).mkdirs()
+        val file = File(directoryPath, fileName)
         if (!file.exists()) {
             file.createNewFile()
             file.writeText("[]")
