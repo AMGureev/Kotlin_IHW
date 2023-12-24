@@ -11,8 +11,8 @@ import java.io.File
 import kotlin.io.path.Path
 
 class InMemoryAccountDao : AccountDao {
-    private val DIRECTORY_PATH = "accounts"
-    private val FILE_NAME = "accounts.json"
+    private val directoryPath = "accounts"
+    private val fileName = "accounts.json"
     private var accounts = mutableListOf<AccountEntity>()
     override fun registerUser(name: String, password: String) {
         val hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt())
@@ -32,8 +32,8 @@ class InMemoryAccountDao : AccountDao {
     }
 
     override fun saveAllAccounts() {
-        File(DIRECTORY_PATH).mkdirs()
-        val file = Path(DIRECTORY_PATH, FILE_NAME).toFile()
+        File(directoryPath).mkdirs()
+        val file = Path(directoryPath, fileName).toFile()
         val mapper = ObjectMapper()
         mapper.registerModule(JavaTimeModule())
         mapper.registerKotlinModule()
@@ -41,8 +41,8 @@ class InMemoryAccountDao : AccountDao {
     }
 
     override fun fillingAccountsData() {
-        File(DIRECTORY_PATH).mkdirs()
-        val file = File(DIRECTORY_PATH, FILE_NAME)
+        File(directoryPath).mkdirs()
+        val file = File(directoryPath, fileName)
         if (!file.exists()) {
             file.createNewFile()
             file.writeText("[]")
