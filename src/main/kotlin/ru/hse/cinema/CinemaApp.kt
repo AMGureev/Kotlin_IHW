@@ -14,7 +14,7 @@ class CinemaApp(
     private val sessionDao: SessionDao,
 ) {
     // TODO В дальнейшем надо реализовать просмотр возможности редактирования продолжительность фильма (чтобы не повлияло на сессии)
-    private fun checkCorrectSessionTime(title: String, date: LocalDateTime): Boolean {
+    private fun checkCorrectSessionTime(title: String, date: LocalDateTime): Boolean { // checking the correctness of the session time
         for (index in 0..<sessionDao.getAllSessions().size) {
             if ((sessionDao.getAllSessions()[index].timeStart.plusMinutes(movieDao.returnMovieByName(title).duration.toLong()) > date && (date > sessionDao.getAllSessions()[index].timeStart)) || ((date < sessionDao.getAllSessions()[index].timeStart) && (date.plusMinutes(
                     movieDao.returnMovieByName(title).duration.toLong()
@@ -26,7 +26,7 @@ class CinemaApp(
         return true
     }
 
-    fun createSession(title: String, date: LocalDateTime) {
+    fun createSession(title: String, date: LocalDateTime) { // create new session
         if (movieDao.isMovie(title)) {
             if (checkCorrectSessionTime(title, date)) {
                 sessionDao.addSession(SessionEntity(sessionDao.getID(), movieDao.returnMovieByName(title), date))
@@ -39,7 +39,7 @@ class CinemaApp(
         }
     }
 
-    fun createMovie(title: String, time: Int) {
+    fun createMovie(title: String, time: Int) { // create movie
         if (time <= 0){
             println("Error! - the duration of the movie cannot be negative")
         } else {
@@ -56,7 +56,7 @@ class CinemaApp(
         }
     }
 
-    fun buyTicket(id: Int, num: Int) {
+    fun buyTicket(id: Int, num: Int) { // buy ticket
         if (sessionDao.isSession(id)) {
             if (ticketDao.ticketIsSold(sessionDao.returnSessionById(id).tickets[num - 1])) {
                 println("The ticket is not available for sale!")
@@ -69,7 +69,7 @@ class CinemaApp(
         }
     }
 
-    fun returnTicket(id: Int, num: Int) {
+    fun returnTicket(id: Int, num: Int) { // return ticket if it was purchased and not activated
         if (sessionDao.isSession(id)) {
             if (ticketDao.ticketIsSold(sessionDao.returnSessionById(id).tickets[num - 1])) {
                 if (sessionDao.returnSessionById(id).tickets[num - 1].activation) {
@@ -86,7 +86,7 @@ class CinemaApp(
         }
     }
 
-    fun returnTicketsById(id: Int, access: Boolean) {
+    fun returnTicketsById(id: Int, access: Boolean) { // show tickets belonging to some session
         if (sessionDao.isSession(id)) {
             if (access) {
                 sessionDao.returnSessionById(id).tickets
@@ -112,7 +112,7 @@ class CinemaApp(
         }
     }
 
-    fun activationTicket(id: Int, num: Int) {
+    fun activationTicket(id: Int, num: Int) { // activate ticket
         if (num > 32 || num <= 0) {
             println("Error! - the seat's number is not existing!")
         } else {
@@ -133,7 +133,7 @@ class CinemaApp(
         }
     }
 
-    fun editMovieInformation(oldTitle: String, newTitle: String, newDuration: Int) {
+    fun editMovieInformation(oldTitle: String, newTitle: String, newDuration: Int) { // edit information about movie
         var newTitle = newTitle
         var newDuration = newDuration
         if (movieDao.isMovie(oldTitle)) {
@@ -158,7 +158,7 @@ class CinemaApp(
         }
     }
 
-    fun editSessionInformation(id: Int, newDate: LocalDateTime) {
+    fun editSessionInformation(id: Int, newDate: LocalDateTime) { // edit information about session
         if (sessionDao.isSession(id)) {
             if (checkCorrectSessionTime(sessionDao.returnSessionById(id).movie.title, newDate)) {
                 sessionDao.editSession(sessionDao.returnSessionById(id), newDate)
@@ -171,19 +171,19 @@ class CinemaApp(
         }
     }
 
-    fun saveAllInformationToJson() {
+    fun saveAllInformationToJson() { // save all information (tickets, sessions and movies) to Jsons
         movieDao.saveAllMovies()
         sessionDao.saveAllSessions()
         ticketDao.saveAllSoldTickets()
     }
 
-    fun initialFillingOfFiles() {
+    fun initialFillingOfFiles() { // get information from json files
         movieDao.fillingMoviesData()
         ticketDao.fillingSoldTicketsData()
         sessionDao.fillingSessionsData()
     }
 
-    private fun prettyTicketsOutput(array: List<TicketEntity>, status: Boolean) {
+    private fun prettyTicketsOutput(array: List<TicketEntity>, status: Boolean) { // output array tickets
         val condition = if (status) "purchased" else "available for purchase"
         for (index in array.indices) {
             val activation = if (array[index].activation) "activated" else "not activated"
@@ -191,7 +191,7 @@ class CinemaApp(
         }
     }
 
-    fun prettySessionsOutput() {
+    fun prettySessionsOutput() { // output sessions
         if (sessionDao.getAllSessions().isEmpty()){
             println("There are no sessions")
         } else{
