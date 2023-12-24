@@ -10,8 +10,8 @@ import java.io.File
 import kotlin.io.path.Path
 
 class InMemoryTicketDao : TicketDao {
-    private val DIRECTORY_PATH = "tickets"
-    private val FILE_NAME = "soldTickets.json"
+    private val directoryPath = "tickets"
+    private val fileName = "soldTickets.json"
     private var soldTickets = mutableListOf<TicketEntity>()
     override fun sellTicket(ticket: TicketEntity) {
         soldTickets.add(ticket)
@@ -36,8 +36,8 @@ class InMemoryTicketDao : TicketDao {
     }
 
     override fun saveAllSoldTickets() {
-        File(DIRECTORY_PATH).mkdirs()
-        val file = Path(DIRECTORY_PATH, FILE_NAME).toFile()
+        File(directoryPath).mkdirs()
+        val file = Path(directoryPath, fileName).toFile()
         val mapper = ObjectMapper()
         mapper.registerModule(JavaTimeModule())
         mapper.registerKotlinModule()
@@ -45,8 +45,8 @@ class InMemoryTicketDao : TicketDao {
     }
 
     override fun fillingSoldTicketsData() {
-        File(DIRECTORY_PATH).mkdirs()
-        val file = File(DIRECTORY_PATH, FILE_NAME)
+        File(directoryPath).mkdirs()
+        val file = File(directoryPath, fileName)
         if (!file.exists()) {
             file.createNewFile()
             file.writeText("[]")
